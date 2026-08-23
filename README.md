@@ -1,4 +1,4 @@
-# SLECI-analysis
+# NPSLE-AKI Analysis
 
 **Reproducible analysis code** for the study:
 *Cognitive/Neuropsychiatric Involvement and Acute Kidney Injury in Critically Ill Patients With Systemic Lupus Erythematosus: A Derivation and External Validation Study.*
