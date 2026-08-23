@@ -30,15 +30,14 @@ the SQL extraction scripts against their local database copies.
 - Python 3.13 with: `pandas`, `numpy`, `scipy`, `statsmodels`, `matplotlib`.
 - A local PostgreSQL 18 instance with the PhysioNet databases loaded is
   required for `extract_severity.py` (uses `psql` via subprocess).
-- The scripts read paths from environment variables, falling back to the
-  author's local layout:
+- The scripts read paths from environment variables:
 
-  | Variable           | Purpose                        | Fallback                              |
-  |--------------------|--------------------------------|---------------------------------------|
-  | `SLECI_DATA`       | cohort CSV directory           | `D:/BaiduSyncdisk/MIMIC/SLECI/data`   |
-  | `SLECI_OUT`        | analysis output directory      | `D:/BaiduSyncdisk/MIMIC/SLECI/analysis` |
-  | `SLECI_BASE`       | project root (figures)         | `D:/BaiduSyncdisk/MIMIC/SLECI`        |
-  | `SLECI_PGPASSWORD` | PostgreSQL password for `psql` | (empty — supply your own)             |
+  | Variable           | Purpose                        |
+  |--------------------|--------------------------------|
+  | `SLECI_DATA`       | cohort CSV directory           |
+  | `SLECI_OUT`        | analysis output directory      |
+  | `SLECI_BASE`       | project root (figures)         |
+  | `SLECI_PGPASSWORD` | PostgreSQL password for `psql` |
 
   Set these before running, e.g.:
   `export SLECI_DATA=/path/to/data SLECI_PGPASSWORD=****`
