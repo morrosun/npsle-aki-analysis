@@ -1,0 +1,24 @@
+# Patient-derived data (PhysioNet DUA — never publish)
+data/
+*.csv
+*.rds
+*.parquet
+
+# Manuscript build artifacts
+output/
+*.docx
+
+# Assistant / session
+.workbuddy/
+tmp_fig/
+*_chk.txt
+verify_*.py
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
