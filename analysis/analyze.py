@@ -15,8 +15,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-DATA = os.environ.get("SLECI_DATA", "D:/BaiduSyncdisk/MIMIC/SLECI/data")
-OUT = os.environ.get("SLECI_OUT", "D:/BaiduSyncdisk/MIMIC/SLECI/analysis")
+DATA = os.environ.get("SLECI_DATA", "data")
+OUT = os.environ.get("SLECI_OUT", "analysis")
 os.makedirs(OUT, exist_ok=True)
 
 COLS = ["db","subject_id","hadm_id","stay_id","age","female","race_ethnicity","mortality",
@@ -116,10 +116,27 @@ for db in ["MIMIC-IV","NWICU","eICU"]:
     prev[db]={"n":n,"narrow":nn,"narrow_pct":round(100*nn/n,1),
               "broad":nb,"broad_pct":round(100*nb/n,1)}
 R["prevalence"]=prev
-pp=meta_proportion([(db,prev[db]["narrow"],prev[db]["n"]) for db in ["MIMIC-IV","NWICU","eICU"]])
-R["prevalence_pooled_narrow"]={"pct":round(100*pp[0],1),"lo":round(100*pp[1],1),"hi":round(100*pp[2],1)}
-pb=meta_proportion([(db,prev[db]["broad"],prev[db]["n"]) for db in ["MIMIC-IV","NWICU","eICU"]])
-R["prevalence_pooled_broad"]={"pct":round(100*pb[0],1),"lo":round(100*pb[1],1),"hi":round(100*pb[2],1)}
+# Pooled prevalence: MIMIC-IV + eICU only. NWICU (n=49, 5 narrow events) is
+# retained as descriptive corroboration and is NOT pooled: in a random-effects
+# model with k=3 it received ~24% of the weight against 6.1% of the sample,
+# and it lacks harmonizable covariates. The 3-database values are kept for
+# the record.
+POOL_DBS = ["MIMIC-IV", "eICU"]
+ALL_DBS = ["MIMIC-IV", "NWICU", "eICU"]
+pp=meta_proportion([(db,prev[db]["narrow"],prev[db]["n"]) for db in POOL_DBS])
+R["prevalence_pooled_narrow"]={"pct":round(100*pp[0],1),"lo":round(100*pp[1],1),"hi":round(100*pp[2],1),
+                               "k":2,"databases":POOL_DBS,
+                               "note":"NWICU descriptive only, not pooled"}
+pb=meta_proportion([(db,prev[db]["broad"],prev[db]["n"]) for db in POOL_DBS])
+R["prevalence_pooled_broad"]={"pct":round(100*pp[0],1),"lo":round(100*pp[1],1),"hi":round(100*pp[2],1),
+                              "k":2,"databases":POOL_DBS,
+                              "note":"NWICU descriptive only, not pooled"}
+pp3=meta_proportion([(db,prev[db]["narrow"],prev[db]["n"]) for db in ALL_DBS])
+pb3=meta_proportion([(db,prev[db]["broad"],prev[db]["n"]) for db in ALL_DBS])
+R["prevalence_pooled_narrow_3db_incl_NWICU"]={"pct":round(100*pp3[0],1),"lo":round(100*pp3[1],1),"hi":round(100*pp3[2],1),
+                                              "k":3,"note":"superseded; retained for transparency"}
+R["prevalence_pooled_broad_3db_incl_NWICU"]={"pct":round(100*pb3[0],1),"lo":round(100*pb3[1],1),"hi":round(100*pb3[2],1),
+                                             "k":3,"note":"superseded; retained for transparency"}
 
 mim=df[df.db=="MIMIC-IV"].copy()
 
@@ -569,18 +586,32 @@ forest_adjusted(R["meta_mortality_narrow_adj"],
     "forest_mortality_adj.png", ref=R["mimic_mortality_fulladj_narrow"])
 
 # ---- Prevalence bar ----
-fig,ax=plt.subplots(figsize=(7.0,3.6))
+# NWICU is drawn in grey (descriptive corroboration only, not pooled); pooled
+# estimates combine MIMIC-IV + eICU. Mirrors analysis/redraw_prevalence_v18.py.
+C_DESC_N="#8f8f8f"; C_DESC_B="#c9c9c9"
+fig,ax=plt.subplots(figsize=(7.0,4.2))
 dbs=["MIMIC-IV","NWICU","eICU"]
 narr=[prev[d]["narrow_pct"] for d in dbs]; barr=[prev[d]["broad_pct"] for d in dbs]
 x=np.arange(len(dbs)); w=0.36
-ax.bar(x-w/2,narr,w,label="Narrow (cognitive/delirium)",color=C_MIMIC)
-ax.bar(x+w/2,barr,w,label="Broad (full NPSLE)",color="#d6604d")
+for i,d in enumerate(dbs):
+    cn,cb=(C_DESC_N,C_DESC_B) if d=="NWICU" else (C_MIMIC,"#d6604d")
+    lab_n="Narrow (cognitive/delirium)" if i==0 else None
+    lab_b="Broad (full NPSLE)" if i==0 else None
+    ax.bar(x[i]-w/2,narr[i],w,color=cn,label=lab_n)
+    ax.bar(x[i]+w/2,barr[i],w,color=cb,label=lab_b)
 for i,(nv,bv) in enumerate(zip(narr,barr)):
     ax.text(i-w/2,nv+0.6,f"{nv}%",ha="center",fontsize=8.5); ax.text(i+w/2,bv+0.6,f"{bv}%",ha="center",fontsize=8.5)
-ax.set_xticks(x); ax.set_xticklabels([f"{d}\n(n={prev[d]['n']})" for d in dbs]); ax.set_ylabel("% of SLE ICU stays")
+ax.set_xticks(x); ax.set_xticklabels([f"{d}{'*' if d=='NWICU' else ''}\n(n={prev[d]['n']})" for d in dbs]); ax.set_ylabel("% of SLE ICU stays")
 ax.legend(); ax.set_ylim(0,max(barr)+6)
 ax.set_title("Prevalence of neuropsychiatric involvement in SLE ICU stays",fontweight="bold")
-plt.tight_layout(); plt.savefig(f"{OUT}/prevalence.png"); plt.close()
+_pn=R["prevalence_pooled_narrow"]; _pbd=R["prevalence_pooled_broad"]
+fig.text(0.5,0.02,
+    "* NWICU is descriptive only and is not included in the pooled estimates. "
+    f"Pooled (MIMIC-IV + eICU, random effects): narrow {_pn['pct']}% ({_pn['lo']}\u2013{_pn['hi']}), "
+    f"broad {_pbd['pct']}% ({_pbd['lo']}\u2013{_pbd['hi']}).",
+    ha="center",fontsize=7.8,color="#444444")
+plt.tight_layout(); plt.subplots_adjust(bottom=0.22)
+plt.savefig(f"{OUT}/prevalence.png",dpi=300,facecolor="white",bbox_inches="tight"); plt.close()
 
 # ---- Cohort flow (box diagram) ----
 fig,ax=plt.subplots(figsize=(7.0,5.0)); ax.axis("off"); ax.set_xlim(0,10); ax.set_ylim(0,10)

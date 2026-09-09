@@ -3,7 +3,7 @@
 import os
 import matplotlib.pyplot as plt
 
-BASE = os.environ.get("SLECI_BASE", "D:/BaiduSyncdisk/MIMIC/SLECI")
+BASE = os.environ.get("SLECI_BASE", ".")
 ANA = os.path.join(BASE, "analysis")
 OUT = os.path.join(BASE, "output")
 

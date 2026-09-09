@@ -1,6 +1,6 @@
 import os
 import pandas as pd, numpy as np
-DATA = os.environ.get("SLECI_DATA", "D:/BaiduSyncdisk/MIMIC/SLECI/data")
+DATA = os.environ.get("SLECI_DATA", "data")
 df = pd.read_csv(f"{DATA}/mimiciv_sle.csv")
 mim = df[df.db == "MIMIC-IV"].copy()
 print("MIMIC-IV rows:", len(mim))
