@@ -42,13 +42,16 @@ ckd_icd AS (
 SELECT s.stay_id,
        COALESCE(a.aki_stage_max,0)                                  AS aki_stage_max,
        COALESCE(a.base_creat_48h, a.base_creat_7, a.base_creat_48, a.creat_min) AS baseline_creat,
-       CASE WHEN COALESCE(a.base_creat_7, a.base_creat_48, a.creat_min) IS NULL THEN NULL
+       -- eGFR uses the SAME baseline creatinine as baseline_creat (48-h window,
+       -- no lower bound). Earlier versions used MIN(creat_low_past_7day) here,
+       -- which is the lowest creatinine anywhere in the stay, not the early value.
+       CASE WHEN COALESCE(a.base_creat_48h, a.base_creat_7, a.base_creat_48, a.creat_min) IS NULL THEN NULL
             ELSE
               142.0
-              * POWER( LEAST( COALESCE(a.base_creat_7,a.base_creat_48,a.creat_min)
+              * POWER( LEAST( COALESCE(a.base_creat_48h, a.base_creat_7, a.base_creat_48, a.creat_min)
                               / (CASE WHEN s.female=1 THEN 0.7 ELSE 0.9 END), 1.0),
                        CASE WHEN s.female=1 THEN -0.241 ELSE -0.302 END )
-              * POWER( GREATEST( COALESCE(a.base_creat_7,a.base_creat_48,a.creat_min)
+              * POWER( GREATEST( COALESCE(a.base_creat_48h, a.base_creat_7, a.base_creat_48, a.creat_min)
                               / (CASE WHEN s.female=1 THEN 0.7 ELSE 0.9 END), 1.0),
                        -1.200 )
               * POWER( 0.9938, s.age )

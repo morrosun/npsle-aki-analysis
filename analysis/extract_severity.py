@@ -8,7 +8,7 @@ Idiom: CSV stay_id == MIMIC/NWICU icustay_id == eICU patientunitstayid.
 import os, subprocess
 import pandas as pd
 
-DATA = os.environ.get("SLECI_DATA", "data")
+DATA = "data"
 PSQL = "D:/Program Files/PostgreSQL/18/bin/psql.exe"
 ENV = dict(os.environ, PGPASSWORD=os.environ.get("SLECI_PGPASSWORD", ""), PGCLIENTENCODING="UTF8")
 

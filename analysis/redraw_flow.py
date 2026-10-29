@@ -33,7 +33,7 @@ def draw_flow(save_paths):
     box(2.0, 7.1, 2.6, 1.1,
         "MIMIC-IV\nn = 550\n(derivation)", fc="#dbe7f3")
     box(5.0, 7.1, 2.6, 1.1,
-        "eICU-CRD\nn = 210\n(external validation)", fc="#e4efdc")
+        "eICU-CRD\nn = 210\n(external consistency)", fc="#e4efdc")
     box(8.0, 7.1, 2.6, 1.1,
         "NWICU\nn = 49\n(descriptive only)", fc="#f3e9dc")
 
@@ -41,22 +41,22 @@ def draw_flow(save_paths):
         arrow(xc, 6.55, xc, 5.75, color="#888")
 
     # Prevalence boxes
-    box(2.0, 4.95, 2.6, 1.2,
-        "Narrow NPSLE\n92 (16.7%)\nBroad 37.1%")
-    box(5.0, 4.95, 2.6, 1.2,
-        "Narrow NPSLE\n16 (7.6%)\nBroad 27.6%")
-    box(8.0, 4.95, 2.6, 1.2,
-        "Narrow NPSLE\n5 (10.2%)\nBroad 16.3%")
+    box(2.0, 4.95, 2.6, 1.25,
+        "Narrow coded\ninvolvement\n92 (16.7%)\nBroad 37.1%")
+    box(5.0, 4.95, 2.6, 1.25,
+        "Narrow coded\ninvolvement\n16 (7.6%)\nBroad 27.6%")
+    box(8.0, 4.95, 2.6, 1.25,
+        "Narrow coded\ninvolvement\n5 (10.2%)\nBroad 16.3%")
 
     for xc in (2.0, 5.0, 8.0):
         arrow(xc, 4.35, xc, 3.75, color="#888")
 
     # Bottom summary box — wrapped to stay inside
     bottom_text = (
-        "Pooled narrow prevalence 11.4% (95% CI 6.2\u201320.1%)\n"
-        "Pooled broad prevalence 28.4% (95% CI 19.6\u201339.2%)\n"
+        "Pooled narrow prevalence 11.7% (95% CI 5.3\u201324.1%), MIMIC-IV + eICU\n"
+        "Broad prevalence by database only \u2014 broad lists not harmonized\n"
         "Primary analysis: MIMIC-IV (logistic regression + propensity-score matching);\n"
-        "eICU external validation; cross-DB random-effects meta-analysis"
+        "eICU external consistency analysis; cross-DB random-effects meta-analysis"
     )
     box(5.0, 2.75, 8.5, 1.45, bottom_text, fc="#f7f7f7")
 

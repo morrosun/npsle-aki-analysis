@@ -17,7 +17,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-BASE = os.environ.get("SLECI_BASE", ".")
+BASE = os.environ.get("SLECI_BASE", os.environ.get("SLECI_BASE", "."))
 ANA = os.path.join(BASE, "analysis")
 
 with open(os.path.join(ANA, "results.json"), encoding="utf-8") as f:

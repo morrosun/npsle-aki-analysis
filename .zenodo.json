@@ -1,18 +1,46 @@
 {
   "title": "SLECI-analysis: reproducible analysis code for neuropsychiatric involvement and acute kidney injury in critically ill patients with systemic lupus erythematosus",
   "upload_type": "software",
-  "publication_date": "2026-08-23",
-  "description": "Analysis code (SQL extraction + Python pipeline) for the study 'Cognitive/Neuropsychiatric Involvement and Acute Kidney Injury in Critically Ill Patients With Systemic Lupus Erythematosus: A Derivation and External Validation Study'. Cohorts are derived from PhysioNet-credentialed databases (MIMIC-IV derivation, eICU-CRD external validation, NWICU descriptive corroboration). Repository contains code only; no patient-level data are published (PhysioNet Data Use Agreement).",
+  "publication_date": "2026-10-29",
+  "description": "Analysis code (SQL extraction + Python pipeline, with R code for the time-varying Cox models) for the study 'Cognitive/Neuropsychiatric Involvement and Acute Kidney Injury in Critically Ill Patients With Systemic Lupus Erythematosus: A Derivation and External Consistency Study'. Cohorts are derived from PhysioNet-credentialed databases (MIMIC-IV derivation, eICU-CRD external consistency analysis, NWICU descriptive corroboration only). Repository contains code only; no patient-level data are published (PhysioNet Data Use Agreement).",
   "creators": [
-    {"name": "Wang, Kai", "orcid": "0000-0002-0511-8038", "affiliation": "Department of Rheumatology and Immunology, The First People's Hospital of Huai'an, Nanjing Medical University, Huai'an, China"},
-    {"name": "Liu, Ying", "affiliation": "Department of Rheumatology and Immunology, Yancheng First People's Hospital, Yancheng, China"},
-    {"name": "Li, Siyin", "affiliation": "Department of Rheumatology and Immunology, Mianyang Central Hospital, Mianyang, China"},
-    {"name": "Liu, Xin", "affiliation": "Department of Rheumatology and Immunology, General Hospital of Southern Theatre Command, Guangzhou, China"},
-    {"name": "Zhang, Xueqin", "affiliation": "Department of Rheumatology and Immunology, The First People's Hospital of Huai'an, Nanjing Medical University, Huai'an, China"},
-    {"name": "Yin, Huiting", "affiliation": "Department of Rheumatology and Immunology, The First People's Hospital of Huai'an, Nanjing Medical University, Huai'an, China"},
-    {"name": "Li, Chang", "affiliation": "Key Laboratory of Nuclear Technology Medical Transformation, National Health Commission, Huai'an, China"},
-    {"name": "Meng, Deqian", "affiliation": "Department of Rheumatology and Immunology, The First People's Hospital of Huai'an, Nanjing Medical University, Huai'an, China"},
-    {"name": "Li, Ju", "affiliation": "Department of Rheumatology and Immunology, The First People's Hospital of Huai'an, Nanjing Medical University, Huai'an, China"}
+    {
+      "name": "Wang, Kai",
+      "orcid": "0000-0002-0511-8038",
+      "affiliation": "Department of Rheumatology and Immunology, The First People's Hospital of Huai'an, Nanjing Medical University, Huai'an, China"
+    },
+    {
+      "name": "Liu, Ying",
+      "affiliation": "Department of Rheumatology and Immunology, Yancheng First People's Hospital, Yancheng, China"
+    },
+    {
+      "name": "Li, Siyin",
+      "affiliation": "Department of Rheumatology and Immunology, Mianyang Central Hospital, Mianyang, China"
+    },
+    {
+      "name": "Liu, Xin",
+      "affiliation": "Department of Rheumatology and Immunology, General Hospital of Southern Theatre Command, Guangzhou, China"
+    },
+    {
+      "name": "Zhang, Xueqin",
+      "affiliation": "Department of Rheumatology and Immunology, The First People's Hospital of Huai'an, Nanjing Medical University, Huai'an, China"
+    },
+    {
+      "name": "Yin, Huiting",
+      "affiliation": "Department of Rheumatology and Immunology, The First People's Hospital of Huai'an, Nanjing Medical University, Huai'an, China"
+    },
+    {
+      "name": "Li, Chang",
+      "affiliation": "Key Laboratory of Nuclear Technology Medical Transformation, National Health Commission, Huai'an, China"
+    },
+    {
+      "name": "Meng, Deqian",
+      "affiliation": "Department of Rheumatology and Immunology, The First People's Hospital of Huai'an, Nanjing Medical University, Huai'an, China"
+    },
+    {
+      "name": "Li, Ju",
+      "affiliation": "Department of Rheumatology and Immunology, The First People's Hospital of Huai'an, Nanjing Medical University, Huai'an, China"
+    }
   ],
   "access_right": "open",
   "license": "mit",
@@ -25,5 +53,5 @@
     "eICU",
     "reproducible research"
   ],
-  "version": "1.0.2"
+  "version": "1.1.0"
 }

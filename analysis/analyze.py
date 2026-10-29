@@ -1,4 +1,3 @@
-import os
 # -*- coding: utf-8 -*-
 """SLE neuropsychiatric/cognitive (NPSLE) analysis across MIMIC-IV, NWICU, eICU.
 Cohort = SLE ICU stays. Primary exposure = NPSLE (narrow=cognitive/delirium/encephalopathy/dementia;
@@ -128,7 +127,7 @@ R["prevalence_pooled_narrow"]={"pct":round(100*pp[0],1),"lo":round(100*pp[1],1),
                                "k":2,"databases":POOL_DBS,
                                "note":"NWICU descriptive only, not pooled"}
 pb=meta_proportion([(db,prev[db]["broad"],prev[db]["n"]) for db in POOL_DBS])
-R["prevalence_pooled_broad"]={"pct":round(100*pp[0],1),"lo":round(100*pp[1],1),"hi":round(100*pp[2],1),
+R["prevalence_pooled_broad"]={"pct":round(100*pb[0],1),"lo":round(100*pb[1],1),"hi":round(100*pb[2],1),
                               "k":2,"databases":POOL_DBS,
                               "note":"NWICU descriptive only, not pooled"}
 pp3=meta_proportion([(db,prev[db]["narrow"],prev[db]["n"]) for db in ALL_DBS])
@@ -457,7 +456,7 @@ sens["aki_stage2plus_psm_narrow"]    =psm_general(mi,"npsle_narrow","aki_stage2p
 sens["aki_stage2plus_prevalence"]    ={"n":int(len(mi)),"events":int(mi.aki_stage2plus.sum()),
                                        "pct":round(100*mi.aki_stage2plus.mean(),1)}
 # (B) exclude baseline CKD (eGFR < 60 from baseline creatinine)
-mi_nockd = mi[~(mi["baseline_ckd"]==True)].copy()
+mi_nockd = mi[mi["baseline_egfr"].notna() & (mi["baseline_ckd"] == False)].copy()  # 显式排除「无基线肌酐」者（NaN<60 会得 False）
 sens["aki_nockd_fulladj_narrow"] =outcome_or_sens(mi_nockd,"aki","npsle_narrow")
 sens["aki_nockd_psm_narrow"]     =psm_general(mi_nockd,"npsle_narrow","aki",SENS_COV)
 sens["n_excluded_ckd_egfr"]      =int((mi["baseline_ckd"]==True).sum())
