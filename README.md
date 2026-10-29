@@ -102,5 +102,6 @@ MIT — see [LICENSE](LICENSE).
 
 Wang K, et al. *Cognitive/Neuropsychiatric Involvement and Acute Kidney Injury
 in Critically Ill Patients With Systemic Lupus Erythematosus: A Derivation and
-External Validation Study.* (submitted). Code: https://github.com/morrosun/npsle-aki-analysis
-(archived at Zenodo: https://doi.org/10.5281/zenodo.22066849).
+External Consistency Study.* (submitted). Code: https://github.com/morrosun/npsle-aki-analysis
+(tag `v1.1.0`; archived at Zenodo, version DOI https://doi.org/10.5281/zenodo.23767393,
+concept DOI https://doi.org/10.5281/zenodo.22066848).
