@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-BASE = os.environ.get("SLECI_BASE", os.environ.get("SLECI_BASE", "."))
+BASE = os.environ.get("SLECI_BASE", "")
 ANA = os.path.join(BASE, "analysis")
 
 with open(os.path.join(ANA, "results.json"), encoding="utf-8") as f:
@@ -40,7 +40,7 @@ barr = [prev[d]["broad_pct"] for d in dbs]
 x = np.arange(len(dbs))
 w = 0.36
 
-fig, ax = plt.subplots(figsize=(7.0, 4.2))
+fig, ax = plt.subplots(figsize=(7.0, 3.9))
 for i, d in enumerate(dbs):
     desc = (d == "NWICU")
     cn, cb = (C_DESC_N, C_DESC_B) if desc else (C_MIMIC, C_BROAD)
@@ -53,25 +53,31 @@ for i, d in enumerate(dbs):
 
 labels = [f"{d}{'*' if d == 'NWICU' else ''}\n(n={prev[d]['n']})" for d in dbs]
 ax.set_xticks(x)
-ax.set_xticklabels(labels)
-ax.set_ylabel("% of SLE ICU stays")
-ax.legend(loc="upper right", fontsize=8)
+ax.set_xticklabels(labels, fontsize=8.6)
+ax.set_ylabel("% of SLE ICU stays", fontsize=8.6)
+ax.tick_params(axis="y", labelsize=8.6)
+ax.legend(loc="upper right", fontsize=7.6)
 ax.set_ylim(0, max(barr) + 10)
 ax.set_title("Prevalence of neuropsychiatric involvement in SLE ICU stays",
-             fontweight="bold")
+             fontweight="bold", fontsize=11)
 
+# NOTE: the footnote must be wrapped by hand. A single long fig.text() line
+# widens the canvas under bbox_inches="tight" (it reached 4252 px against the
+# 2070 px flow panel), and the composite then enlarged Panel A to match while
+# Panel B stayed at its original size.
 pn = R["prevalence_pooled_narrow"]
-fig.text(0.5, 0.02,
-         f"* NWICU is descriptive only and is not included in any pooled estimate. "
-         f"Pooled (MIMIC-IV + eICU, random effects), narrow definition only: {pn['pct']}% "
-         f"({pn['lo']}\u2013{pn['hi']}). Broad proportions are shown by database and are not "
-         f"pooled, because the broad code lists are not harmonized.",
-         ha="center", fontsize=7.4, color="#444444")
+foot = ("* NWICU is descriptive only and is not included in any pooled estimate.\n"
+        f"Pooled (MIMIC-IV + eICU, random effects), narrow definition only: "
+        f"{pn['pct']}% ({pn['lo']}\u2013{pn['hi']}).\n"
+        "Broad proportions are shown by database and are not pooled, because the "
+        "broad code lists are not harmonized.")
+fig.text(0.5, 0.015, foot, ha="center", va="bottom", fontsize=7.4,
+         color="#444444", linespacing=1.35)
 
 plt.tight_layout()
-plt.subplots_adjust(bottom=0.24)
+plt.subplots_adjust(bottom=0.235)
 plt.savefig(os.path.join(ANA, "prevalence.png"), dpi=300, facecolor="white",
-            bbox_inches="tight")
+            bbox_inches="tight", pad_inches=0.1)
 plt.close()
 print("wrote prevalence.png (v31, no pooled broad)")
 
@@ -85,6 +91,20 @@ def rescale(img, target_w):
         return img
     r = target_w / img.width
     return img.resize((target_w, int(round(img.height * r))), Image.LANCZOS)
+
+
+def trim_bottom(img, keep=16):
+    """Drop trailing blank rows so the two panels are not separated by a gap."""
+    g = img.convert("L")
+    w, h = g.size
+    px = g.load()
+    last = 0
+    for y in range(h):
+        for x in range(0, w, 4):
+            if px[x, y] < 248:
+                last = y
+                break
+    return img.crop((0, 0, w, min(h, last + 1 + keep)))
 
 
 def add_label(img, letter, fs):
@@ -104,13 +124,13 @@ def add_label(img, letter, fs):
 
 
 W = max(flow.width, previmg.width)
-flow_r = rescale(flow, W)
+flow_r = trim_bottom(rescale(flow, W))
 prev_r = rescale(previmg, W)
 fs = max(60, int(W * 0.055))
 flow_l = add_label(flow_r, "A", fs)
 prev_l = add_label(prev_r, "B", fs)
 
-pad = 24
+pad = 30
 H = flow_l.height + prev_l.height + pad
 combined = Image.new("RGB", (W, H), (255, 255, 255))
 combined.paste(flow_l, (0, 0))
