@@ -1,7 +1,7 @@
 {
   "title": "SLECI-analysis: reproducible analysis code for neuropsychiatric involvement and acute kidney injury in critically ill patients with systemic lupus erythematosus",
   "upload_type": "software",
-  "publication_date": "2026-10-29",
+  "publication_date": "2026-10-30",
   "description": "Analysis code (SQL extraction + Python pipeline, with R code for the time-varying Cox models) for the study 'Cognitive/Neuropsychiatric Involvement and Acute Kidney Injury in Critically Ill Patients With Systemic Lupus Erythematosus: A Derivation and External Consistency Study'. Cohorts are derived from PhysioNet-credentialed databases (MIMIC-IV derivation, eICU-CRD external consistency analysis, NWICU descriptive corroboration only). Repository contains code only; no patient-level data are published (PhysioNet Data Use Agreement).",
   "creators": [
     {
@@ -53,5 +53,5 @@
     "eICU",
     "reproducible research"
   ],
-  "version": "1.1.0"
+  "version": "1.2.0"
 }

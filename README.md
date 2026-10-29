@@ -22,13 +22,11 @@ the SQL extraction scripts against their local database copies.
    regression, 1:1 propensity-score matching, severity-adjusted sensitivity,
    and the exploratory cross-database random-effects pooled estimate, writing
    `analysis/results.json`.
-4. **QA / figures (primary)** — `analysis/check_missing.py` (missingness check),
-   `analysis/redraw_flow.py` (Figure 1, Panel A), `analysis/rebuild_figure1_v31.py`
-   (Figure 1, Panel B, and the composite), `analysis/make_figures_v10.py` and
-   `analysis/make_figure3_temporal.py` (Figures 2 and 3), and
-   `analysis/redraw_forest_psm_v33.py`, `analysis/redraw_forest_sens_v33.py`,
-   `analysis/redraw_forest_mortality_v33.py` (Figure 4 and Supplementary
-   Figures S2–S3).
+4. **Quality assurance** — `analysis/check_missing.py` (cohort missingness
+   check). Figure-drawing scripts are deliberately not distributed: every
+   number plotted in the manuscript is produced by the analysis scripts below
+   and is reported in `analysis/results.json` and in the stage-5 to stage-7
+   reports.
 5. **Measured delirium and outcome windows** — `analysis/delirium_vs_icd.py`
    (CAM-ICU agreement with the coded phenotype), `analysis/v28_onset_table.py`
    (recorded sequence of delirium and AKI), and
@@ -60,7 +58,7 @@ the SQL extraction scripts against their local database copies.
   |--------------------|----------------------------------|
   | `SLECI_DATA`       | cohort CSV directory             |
   | `SLECI_OUT`        | analysis output directory        |
-  | `SLECI_BASE`       | project root (figures)           |
+  | `SLECI_BASE`       | project root                     |
   | `SLECI_EXPORT_DIR` | counting-process exports (R)     |
   | `SLECI_PGPASSWORD` | PostgreSQL password              |
 
